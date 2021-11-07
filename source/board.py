@@ -18,6 +18,9 @@ class StepError(Exception):
 class WinnerError(Exception):
     pass
 
+class NoFreeSteps(Exception):
+    pass
+
 class Board:
     def __init__(self, size: int):
         if (not size & 1) or (size < 3):
@@ -26,9 +29,13 @@ class Board:
         self.all_steps = set((n, m) for n in range(size) for m in range(size))
         self.players_steps = defaultdict(set)
 
+# TODO: создать ошибку о конце вариантов ходов (ничья). На доске нет свободных ходов.
     @property
     def free_steps(self):
-        return self.all_steps.difference({item for itm in self.players_steps.values() for item in itm})
+        free_moves = self.all_steps.difference({item for itm in self.players_steps.values() for item in itm})
+        if free_moves:
+            return free_moves
+        raise NoFreeSteps
 
     # @property
     # def free_steps_2(self):
@@ -59,5 +66,15 @@ class Board:
         raise WinnerError
 
 # TODO: сделать метод, который печатает в терминал ASCII доску.
-# TODO: создать ошибку о конце вариантов ходов (ничья). На доске нет свободных ходов.
-# TODO: продумать, спроектиросовтаваить план класса пользователя (игрока). Игрока 2 - комп+челб чел+чел. Разработать методику (что будет делать пользователь)
+    def show_board(self):
+        first_line = f'#{"".join(map(lambda x: f"#{x}", range(self.size)))}#'
+        print(first_line)
+        horizont_lines = horizont_combinations(tuple(self.all_steps), self.size)
+        steps = {itm: key for key, val in self.players_steps.items() for itm in val}
+        for idx, itm in enumerate(horizont_lines):
+            line = '|'.join(map(lambda x: steps.get(x, '0'), itm))
+            print(f'{idx}#{line}#')
+        print('#' * len(first_line))
+
+
+# TODO: продумать, спроектиросовтаваить план класса пользователя (игрока). Игрока 2 - комп+чел, чел+чел. Разработать методику (что будет делать пользователь)

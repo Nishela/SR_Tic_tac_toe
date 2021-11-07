@@ -1,9 +1,11 @@
-from ..board import Board, BoardSizeError, StepError, WinnerError
+from ..board import Board, BoardSizeError, StepError, WinnerError, NoFreeSteps
 
 __all__ = (
     'board_init_test',
     'board_step_test',
     'winner_test',
+    'show_board_test',
+    'free_steps_test',
 )
 
 TESTCASESINIT = (
@@ -64,3 +66,32 @@ def winner_test():
         except WinnerError:
             result = False
         assert itm[1] is result
+
+
+TESTCASESHOW = (
+    ((((0, 0), (2, 1), (1, 1)), 'X'), True),
+    ((((0, 1), (1, 2), (0, 2)), 'Y'), True),
+)
+
+def show_board_test():
+    board = Board(3)
+    board.players_steps = {itm[0][1]: set(itm[0][0]) for itm in TESTCASESHOW}
+    result = True
+    board.show_board()
+    assert result
+
+
+TESTCASENOFREESTEPS = (
+    (((0, 0), 'X'), False),
+)
+
+def free_steps_test():
+    board = Board(3)
+    board.all_steps = set()
+    result = True
+    for itm in TESTCASENOFREESTEPS:
+        try:
+            board.add_step(*itm[0])
+        except NoFreeSteps:
+            result = False
+        assert itm[1] == result
