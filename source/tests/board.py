@@ -1,4 +1,4 @@
-from ..board import Board, BoardSizeError, StepError, WinnerError, NoFreeSteps
+from ..board import Board, BoardSizeError, StepError, WinnerError, NoFreeStepsError
 
 __all__ = (
     'board_init_test',
@@ -92,6 +92,6 @@ def free_steps_test():
     for itm in TESTCASENOFREESTEPS:
         try:
             board.add_step(*itm[0])
-        except NoFreeSteps:
+        except NoFreeStepsError:
             result = False
         assert itm[1] == result
