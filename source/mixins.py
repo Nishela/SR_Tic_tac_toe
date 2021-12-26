@@ -12,7 +12,6 @@ class DoStepMixin:
     def _bot_step(self, free_steps):
         return random.choice(free_steps)
 
-    # TODO: обработка ошибки ввода пользователя
     def _human_step(self):
         step = input('Ваш ход - x, y: ')
         if all(x.isdigit() for x in step.split(',')):

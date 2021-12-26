@@ -5,3 +5,4 @@ from .errors import *
 from .game_process import *
 from .abstract_interface import *
 from .decorators import *
+from .enum_mode import *

@@ -1,6 +1,14 @@
 from .errors import GameModeError, WinnerError, BoardSizeError, StepError, RepeatGameError
 import functools
 
+errors_mapper = {
+    GameModeError: lambda: print('Выбран некоррентный режим игры, попробуй еще. ERROR'),
+    BoardSizeError: lambda: print('Нужно ввести целое нечетное число, которое больше двух! ERROR'),
+    StepError: lambda: print('Некорректные координаты x, y. Попробуй еще: '),
+    ValueError: lambda: print('Некорректный ввод. ERROR'),
+    WinnerError: lambda: None,
+    RepeatGameError: lambda: print('Введи "Y" или "N"'),
+}
 
 def errors_catcher(func):
     @functools.wraps(func)
@@ -9,18 +17,12 @@ def errors_catcher(func):
             try:
                 result = func(*args, **kwargs)
                 break
-            except GameModeError:
-                print(f'Выбран некоррентный режим игры, попробуй еще. ERROR')
-            except BoardSizeError:
-                print(f'Нужно ввести целое нечетное число, которое больше двух! ERROR')
-            except StepError:
-                print(f'Некорректные координаты x, y. Попробуй еще: ')
-            except ValueError:
-                print(f'Некорректный ввод. ERROR')
-            except WinnerError:
-                pass
-            except RepeatGameError:
-                print('Введи "Y" или "N"')
+            except tuple(errors_mapper) as exc:
+                function = errors_mapper.get(exc.__class__)
+                if not function:
+                # if function := errors_mapper.get(exc.__class__) is None:
+                    raise exc
+                function()
         return result
 
     return wrap

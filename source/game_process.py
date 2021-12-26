@@ -17,14 +17,13 @@ class GameProcess:
                 self.user_interface.get_player_step(player, self.board.free_steps)
                 print(self.board)
                 self.first_player_flag = False if player is self.player_1 else True
-                self.user_interface.chek_winner()
-                player.score += 1
-                self.user_interface.show_score()
-                self.start_game = False
-                break
+                #TODO: обработать bool от победителя
+                if self.user_interface.chek_winner():
+                    player.score += 1
+                    self.user_interface.show_score()
+                    self.start_game = False
+                    break
             except NoFreeStepsError:
                 print('Победила дружба!')
                 self.start_game = False
                 break
-            except WinnerError:
-                pass

@@ -1,4 +1,3 @@
-#TODO: унести ошибки в отдельнй модуль errors
 class BoardSizeError(Exception):
     pass
 
