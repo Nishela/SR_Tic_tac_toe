@@ -2,14 +2,17 @@ from abc import ABC, abstractmethod
 from enum import Enum
 
 
-# TODO: enum. Что это? определение режимов игры. нужны четкие структуры перечислений. Удобней чем словарь.
 class AbstractUserInterface(ABC):
-    # TODO: определить все публичные атрибуты. @property @abstract
     @property
     @abstractmethod
     def board(self) -> object:
         pass
 
+    @property
+    @abstractmethod
+    def mode(self) -> Enum:
+        pass
+    
     @property
     @abstractmethod
     def player_1(self) -> object:
@@ -20,13 +23,8 @@ class AbstractUserInterface(ABC):
     def player_2(self) -> object:
         pass
 
-    @property
     @abstractmethod
     def get_game_mode(self) -> Enum:
-        pass
-
-    @abstractmethod
-    def create_board(self) -> object:
         pass
 
     @abstractmethod
@@ -34,11 +32,11 @@ class AbstractUserInterface(ABC):
         pass
 
     @abstractmethod
-    def create_players(self) -> tuple[object, object]:
+    def create_players(self, **kwargs: str) -> tuple:  # [object, object]:
         pass
 
     @abstractmethod
-    def get_player_step(self, player: object, free_steps: tuple[tuple[int, int], ...]) -> None:
+    def get_player_step(self, player: object, free_steps: tuple) -> None:  # [tuple[int, int], ...]) -> None:
         pass
 
     @property
@@ -47,7 +45,7 @@ class AbstractUserInterface(ABC):
         pass
 
     @abstractmethod
-    def chek_winner(self) -> bool:
+    def congrat(self) -> None:
         pass
 
     @abstractmethod
