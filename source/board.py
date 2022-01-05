@@ -11,7 +11,6 @@ class Board:
         if (not size & 1) or (size < 3):
             raise BoardSizeError
         self.size = size
-        # self.all_steps = set((n, m) for n in range(size) for m in range(size))
         self.players_steps = defaultdict(set)
 
     @property
@@ -21,10 +20,6 @@ class Board:
         if free_moves:
             return free_moves
         raise NoFreeStepsError
-
-    # @property
-    # def free_steps_2(self):
-    #     return reduce(lambda x, y: x & y, self.players_steps.values()) | self.all_steps
 
     def __step_validator(self, step):
         if (
@@ -49,16 +44,6 @@ class Board:
             yield item
 
     def winner(self):
-        # combinations = self.__combinations()
-        # for player in self.players_steps:
-        #     for combo in combinations:
-        #         tmp_combo = set(combo)
-        #         if not tmp_combo.difference(self.players_steps[player]):
-        #             return True, player
-        # if tmp_combo.intersection(self.players_steps[player]) == tmp_combo:
-        #     return True, player
-        # return None, False
-
         var = (
             (win_combo, player, steps) for player, steps in self.players_steps.items()
             for win_combo in self.__combinations()
@@ -67,10 +52,6 @@ class Board:
             if not set(combo).difference(player_steps):
                 return player, True
         return None, False
-        # raise WinnerError
-
-    # def show_board(self):
-    #     print(self)
 
     def __str__(self):
         matrix = [['-' for _ in range(self.size)] for _ in range(self.size)]

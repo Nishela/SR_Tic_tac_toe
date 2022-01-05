@@ -1,49 +1,47 @@
-from source import Board
 from .abstract_interface import AbstractUserInterface
-from .game import GameFactory
 from .errors import RepeatGameError
 from .decorators import errors_catcher
-from .enum_mode import ModeEnum
+from .mode_enum import ModeEnum
 
 
-
-# TODO: Разработать на основе абстр класса интерфейса класс взаимодействия с пользователе через терминал.
 class TerminalInterface(AbstractUserInterface):
-    board = None
-    mode = None
-    player_1 = None
-    player_2 = None
 
+    @staticmethod
     @errors_catcher
-    def get_game_mode(self):
+    def get_game_mode():
         print(f'Выбери режим игры!')
         for itm in ModeEnum:
-            #TODO: отформатировать name
-            #string. snakecase to text
-            print(f'{itm.name} --> {itm.value}')
+            print(f'{itm.value} --> {" ".join([item.capitalize() for item in itm.name.split("_")])}')
         mode_tmp = int(input('>> '))
-        self.mode = ModeEnum(mode_tmp)
-        return self.mode
+        return ModeEnum(mode_tmp)
 
-    @property
+    @staticmethod
     @errors_catcher
-    def get_board_size(self):
+    def get_board_size():
         board_size = input('Введи размер доски (целое нечетное число): ')
         return int(board_size)
 
-    def show_board(self):
-        print(self.board)
+    @staticmethod
+    def show_board(board):
+        print(board)
 
-    # TODO: удалить этот класс и переписать все зависимости от него.
+    @staticmethod
     @errors_catcher
-    def get_player_step(self, player, free_steps):
-        return self.__factory.try_step(self.board, player, free_steps)
+    def get_player_step(player, free_steps):
+        print(f'Ход игрока {player.name} {player.symbol}')
+        return player.do_step(free_steps)
 
-    def congrat(self, winner):
+    @staticmethod
+    def congratulation(winner):
         print(f'Поздравляем игрока "{winner}"! Он выиграл!')
-        
-    def show_score(self):
-        print(f'{self.player_1.name} : {self.player_1.score}\n{self.player_2.name} : {self.player_2.score}')
+
+    @staticmethod
+    def draw():
+        print('Победила дружба!')
+
+    @staticmethod
+    def show_score(player_1, player_2):
+        print(f'{player_1.name} : {player_1.score}\n{player_2.name} : {player_2.score}')
 
     @staticmethod
     @errors_catcher

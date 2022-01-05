@@ -31,5 +31,5 @@ class NameMixin:
         return self.name
 
     def _bot_name(self):
-        self.name = 'R2D2'
+        self.name = random.choice(('R2D2', 'Android', 'E2E4', 'MacOS'))
         return self.name
