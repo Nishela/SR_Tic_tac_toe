@@ -6,3 +6,4 @@ env
 venv/
 venv
 .venv
+/to_do.py
